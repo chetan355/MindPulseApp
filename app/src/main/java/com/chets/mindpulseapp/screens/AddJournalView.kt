@@ -1,7 +1,7 @@
 package com.chets.mindpulseapp.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -48,7 +50,13 @@ fun AddJournalView(
     navController: NavController,
     journalViewModel: JournalViewModel? = if (LocalInspectionMode.current) null else viewModel()
 ) {
-    val selectedMood = remember { mutableStateOf<MoodObjects?>(null) }
+    val context = LocalContext.current
+    val isEditing = journalViewModel?.isEditing ?: false
+    val currentMood = journalViewModel?.selectedMood
+
+    val selectedMoodObject = remember(currentMood) {
+        mutableStateOf(moodList.firstOrNull { it.mood.equals(currentMood, ignoreCase = true) })
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -56,7 +64,7 @@ fun AddJournalView(
             TopAppBar(
                 title = {
                     Text(
-                        "Journal Entry",
+                        if (isEditing) "Edit Journal Entry" else "Journal Entry",
                         fontFamily = FontFamily.Serif,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
@@ -64,6 +72,7 @@ fun AddJournalView(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
+                        journalViewModel?.resetState()
                         navController.popBackStack()
                     }) {
                         Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Arrow Back")
@@ -128,9 +137,11 @@ fun AddJournalView(
                         mood = item.mood,
                         emoji = item.emoji,
                         tint = item.tint,
-                        isSelected = selectedMood.value == item,
+                        isSelected = selectedMoodObject.value == item,
                         onClick = {
-                            selectedMood.value = if (selectedMood.value == item) null else item
+                            val newMood = if (selectedMoodObject.value == item) null else item
+                            selectedMoodObject.value = newMood
+                            journalViewModel?.onMoodChange(newMood?.mood)
                         },
                         modifier = Modifier
                             .weight(1f)
@@ -148,11 +159,27 @@ fun AddJournalView(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = {},
+                    onClick = {
+                        val content = journalViewModel?.journalContent?.trim().orEmpty()
+                        if (content.isEmpty()) {
+                            Toast.makeText(context, "Please enter your thoughts", Toast.LENGTH_SHORT).show()
+                        } else {
+                            journalViewModel?.saveJournalEntry(
+                                content = content,
+                                mood = selectedMoodObject.value?.mood
+                            )
+                            Toast.makeText(
+                                context,
+                                if (isEditing) "Journal Entry Updated" else "Journal Entry Created",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            navController.popBackStack()
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "Save Entry",
+                        text = if (isEditing) "Update Entry" else "Save Entry",
                         fontSize = 16.sp,
                         fontFamily = FontFamily.Serif,
                         fontWeight = FontWeight.SemiBold
@@ -160,11 +187,23 @@ fun AddJournalView(
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
-                    onClick = {},
+                    onClick = {
+                        if (isEditing) {
+                            journalViewModel?.deleteCurrentEntry()
+                            Toast.makeText(context, "Journal Entry Deleted", Toast.LENGTH_SHORT).show()
+                        } else {
+                            journalViewModel?.resetState()
+                        }
+                        navController.popBackStack()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError
+                    ),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "Discard Entry",
+                        text = if (isEditing) "Delete Entry" else "Discard Entry",
                         fontSize = 16.sp,
                         fontFamily = FontFamily.Serif,
                         fontWeight = FontWeight.SemiBold

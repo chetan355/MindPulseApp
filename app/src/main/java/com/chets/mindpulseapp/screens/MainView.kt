@@ -141,9 +141,12 @@ fun Navigation(navController: NavController, viewModel: MainViewModel, journalVi
         modifier = Modifier.padding(pd)
     ) {
         composable(Screens.BottomScreen.Home.bRoute) {
-            Home(onAddJournalClick = {
-                navController.navigate(Screens.AddJournal.route)
-            })
+            Home(
+                onAddJournalClick = {
+                    navController.navigate(Screens.AddJournal.route)
+                },
+                journalViewModel = journalViewModel
+            )
         }
         composable(Screens.BottomScreen.Insights.bRoute) {
             Insights()

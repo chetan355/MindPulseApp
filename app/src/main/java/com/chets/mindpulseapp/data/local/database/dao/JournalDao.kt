@@ -3,6 +3,7 @@ package com.chets.mindpulseapp.data.local.database.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.chets.mindpulseapp.data.local.database.entity.JournalEntity
@@ -17,7 +18,7 @@ interface JournalDao
     @Query("SELECT * FROM journal_entries WHERE id = :id")
     fun getEntry(id : Long) : Flow<JournalEntity>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entry : JournalEntity): Long
 
     @Update

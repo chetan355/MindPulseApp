@@ -8,8 +8,6 @@ data class JournalEntity(
     @PrimaryKey(autoGenerate = true)
     val id : Long = 0,
     val content : String,
-    val createdAt : String,
-    val updatedAt : String,
-    val mood : String?,
-    val isLocked : Boolean
+    val createdAt : Long = System.currentTimeMillis(),
+    val mood : String?
 )
