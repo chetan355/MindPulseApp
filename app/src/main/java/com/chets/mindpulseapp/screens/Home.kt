@@ -56,7 +56,7 @@ fun Home(
     onAddJournalClick: () -> Unit = {},
     journalViewModel: JournalViewModel? = if (LocalInspectionMode.current) null else viewModel()
 ) {
-    val greetings = remember { mutableStateOf("Good Evening!") }
+    val greetings = remember { Helper.getGreeting() }
     val selectedMood = remember { mutableStateOf<MoodObjects?>(null) }
 
     val journalEntries by journalViewModel?.getAllJournalEntries?.collectAsState(initial = emptyList())
@@ -70,54 +70,83 @@ fun Home(
         contentColor = MaterialTheme.colorScheme.onBackground
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Column(modifier = Modifier.fillMaxSize().padding(8.dp)) {
-                Text(
-                    text = greetings.value,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 24.sp,
-                    fontFamily = FontFamily.Serif
-                )
-                Text(
-                    text = "Take a moment for yourself.",
-                    fontFamily = FontFamily.Serif,
-                    fontSize = 12.sp,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Text(
-                    text = "How are you feeling today?",
-                    fontFamily = FontFamily.Serif,
-                    fontSize = 14.sp
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(
+            Column(modifier = Modifier.fillMaxSize().padding(12.dp)) {
+                // Top Greeting Section Card
+                Card(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                    ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
-                    moodList.forEach { item ->
-                        MoodBox(
-                            mood = item.mood,
-                            emoji = item.emoji,
-                            tint = item.tint,
-                            isSelected = selectedMood.value == item,
-                            onClick = {
-                                selectedMood.value = if (selectedMood.value == item) null else item
-                            },
-                            modifier = Modifier
-                                .weight(1f)
-                                .aspectRatio(1f)
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = greetings,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 24.sp,
+                            fontFamily = FontFamily.Serif,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                        Text(
+                            text = "Take a moment for yourself.",
+                            fontFamily = FontFamily.Serif,
+                            fontSize = 13.sp,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
+                            modifier = Modifier.padding(top = 4.dp)
                         )
                     }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Mood Section Card
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = "How are you feeling today?",
+                            fontFamily = FontFamily.Serif,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            moodList.forEach { item ->
+                                MoodBox(
+                                    mood = item.mood,
+                                    emoji = item.emoji,
+                                    tint = item.tint,
+                                    isSelected = selectedMood.value == item,
+                                    onClick = {
+                                        selectedMood.value = if (selectedMood.value == item) null else item
+                                    },
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .aspectRatio(1f)
+                                )
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
                 Text(
                     text = "Recent Reflections",
                     fontWeight = FontWeight.SemiBold,
+                    fontSize = 18.sp,
                     fontFamily = FontFamily.Serif
                 )
                 Spacer(modifier = Modifier.height(8.dp))

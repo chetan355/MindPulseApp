@@ -11,6 +11,16 @@ import java.util.Date
 import java.util.Locale
 
 object Helper {
+    fun getGreeting(): String {
+        val hour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
+        return when (hour) {
+            in 5..11 -> "Good Morning!"
+            in 12..16 -> "Good Afternoon!"
+            in 17..20 -> "Good Evening!"
+            else -> "Good Night!"
+        }
+    }
+
     fun formatTimestamp(timestamp: Long): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val messageDateTime =
