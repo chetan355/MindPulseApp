@@ -152,10 +152,17 @@ fun Navigation(navController: NavController, viewModel: MainViewModel, journalVi
             Insights()
         }
         composable(Screens.BottomScreen.Habits.bRoute) {
-            Habits()
+            Habits(
+                onAddHabitClick = {
+                    navController.navigate(Screens.AddHabit.route)
+                }
+            )
         }
         composable(Screens.AddJournal.route) {
             AddJournalView(navController,journalViewModel)
+        }
+        composable(Screens.AddHabit.route) {
+            AddHabitView()
         }
     }
 }
