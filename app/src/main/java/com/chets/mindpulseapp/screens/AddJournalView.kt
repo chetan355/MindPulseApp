@@ -101,7 +101,8 @@ fun AddJournalView(
                         text = "What's in your mind?",
                         fontSize = 24.sp,
                         fontFamily = FontFamily.Serif,
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                     OutlinedTextField(
                         value = journalViewModel?.journalContent ?: "",

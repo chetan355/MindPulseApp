@@ -9,7 +9,8 @@ data class HabitEntity(
     val id: Long = 0,
     val name: String,
     val icon: String,
-    val createAt : Long,
+    val createAt : Long = System.currentTimeMillis(),
     val isActive : Boolean = true,
-    val frequency : String = "DAILY"
+    val frequency : String = "DAILY",
+    val isCompletedToday : Boolean = false
 )

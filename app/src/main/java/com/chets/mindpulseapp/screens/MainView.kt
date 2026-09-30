@@ -38,6 +38,7 @@ import androidx.navigation.compose.rememberNavController
 import com.chets.mindpulseapp.R
 import com.chets.mindpulseapp.data.Screens
 import com.chets.mindpulseapp.data.screensInBottom
+import com.chets.mindpulseapp.viewmodel.HabitViewModel
 import com.chets.mindpulseapp.viewmodel.JournalViewModel
 import com.chets.mindpulseapp.viewmodel.MainViewModel
 
@@ -46,6 +47,7 @@ import com.chets.mindpulseapp.viewmodel.MainViewModel
 fun MainView() {
     val viewModel: MainViewModel = viewModel()
     val journalViewModel : JournalViewModel = viewModel()
+    val habitViewModel: HabitViewModel = viewModel()
     val currentScreen = remember { viewModel.currentScreen.value }
     val title = remember { mutableStateOf(currentScreen.title) }
 
@@ -129,12 +131,24 @@ fun MainView() {
         bottomBar = bottomBar,
         scaffoldState = scaffoldState
     ) { paddingValues ->
-        Navigation(navController = controller, viewModel = viewModel,journalViewModel = journalViewModel, pd = paddingValues)
+        Navigation(
+            navController = controller,
+            viewModel = viewModel,
+            journalViewModel = journalViewModel,
+            habitViewModel = habitViewModel,
+            pd = paddingValues
+        )
     }
 }
 
 @Composable
-fun Navigation(navController: NavController, viewModel: MainViewModel, journalViewModel: JournalViewModel, pd: PaddingValues) {
+fun Navigation(
+    navController: NavController,
+    viewModel: MainViewModel,
+    journalViewModel: JournalViewModel,
+    habitViewModel: HabitViewModel,
+    pd: PaddingValues
+) {
     NavHost(
         navController = navController as NavHostController,
         startDestination = Screens.BottomScreen.Home.route,
@@ -155,14 +169,15 @@ fun Navigation(navController: NavController, viewModel: MainViewModel, journalVi
             Habits(
                 onAddHabitClick = {
                     navController.navigate(Screens.AddHabit.route)
-                }
+                },
+                habitViewModel = habitViewModel
             )
         }
         composable(Screens.AddJournal.route) {
-            AddJournalView(navController,journalViewModel)
+            AddJournalView(navController, journalViewModel)
         }
         composable(Screens.AddHabit.route) {
-            AddHabitView()
+            AddHabitView(navController, habitViewModel)
         }
     }
 }
