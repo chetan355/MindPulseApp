@@ -4,34 +4,39 @@ import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import com.chets.mindpulseapp.R
 
-sealed class MoodObjects(val mood : String, @DrawableRes val emoji : Int, val tint : Color)
+sealed class MoodObjects(val mood: String, @DrawableRes val emoji: Int, val tint: Color, val score: Int)
 {
     object veryLow : MoodObjects(
         "Very Low",
         R.drawable.outline_sentiment_sad_24,
-        Color(0xFFE53935) // Red
+        Color(0xFFE53935), // Red
+        1
     )
 
     object low : MoodObjects(
         "Low",
         R.drawable.outline_sentiment_very_dissatisfied_24,
-        Color(0xFFFF8A80) // Light Red
+        Color(0xFFFF8A80), // Light Red
+        2
     )
 
     object okay : MoodObjects(
         "Okay",
         R.drawable.outline_sentiment_satisfied_24,
-        Color(0xFFFFB74D) // Amber / Orange
+        Color(0xFFFFB74D), // Amber / Orange
+        3
     )
     object good : MoodObjects(
         "Good",
         R.drawable.outline_mood_24,
-        Color(0xFF81C784) // Light Green
+        Color(0xFF81C784), // Light Green
+        4
     )
     object great : MoodObjects(
         "Great",
         R.drawable.outline_sentiment_very_satisfied_24,
-        Color(0xFF4CAF50) // Green
+        Color(0xFF4CAF50), // Green
+        5
     )
 }
 

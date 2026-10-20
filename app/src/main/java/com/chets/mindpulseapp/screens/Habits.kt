@@ -162,19 +162,16 @@ fun HabitSwipeItem(
 
     SwipeToDismissBox(
         state = dismissState,
+        enableDismissFromStartToEnd = false,
+        enableDismissFromEndToStart = true,
         backgroundContent = {
             val color by animateColorAsState(
                 targetValue = when (dismissState.dismissDirection) {
-                    SwipeToDismissBoxValue.EndToStart, SwipeToDismissBoxValue.StartToEnd -> MaterialTheme.colorScheme.errorContainer
+                    SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.errorContainer
                     else -> Color.Transparent
                 },
                 label = "swipe_color"
             )
-
-            val alignment = if (dismissState.dismissDirection == SwipeToDismissBoxValue.StartToEnd)
-                Alignment.CenterStart
-            else
-                Alignment.CenterEnd
 
             Box(
                 modifier = Modifier
@@ -182,17 +179,19 @@ fun HabitSwipeItem(
                     .clip(RoundedCornerShape(16.dp))
                     .background(color)
                     .padding(horizontal = 12.dp),
-                contentAlignment = alignment
+                contentAlignment = Alignment.CenterEnd
             ) {
-                IconButton(
-                    onClick = onDelete
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete Habit",
-                        tint = MaterialTheme.colorScheme.onErrorContainer,
-                        modifier = Modifier.size(24.dp)
-                    )
+                if (dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart) {
+                    IconButton(
+                        onClick = onDelete
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete Habit",
+                            tint = MaterialTheme.colorScheme.onErrorContainer,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
             }
         },

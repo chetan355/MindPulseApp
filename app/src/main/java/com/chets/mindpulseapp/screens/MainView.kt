@@ -163,7 +163,7 @@ fun Navigation(
             )
         }
         composable(Screens.BottomScreen.Insights.bRoute) {
-            Insights()
+            Insights(journalViewModel = journalViewModel)
         }
         composable(Screens.BottomScreen.Habits.bRoute) {
             Habits(
