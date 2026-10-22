@@ -1,5 +1,6 @@
 package com.chets.mindpulseapp.data
 
+import android.util.Log
 import com.google.ai.client.generativeai.GenerativeModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -8,8 +9,8 @@ object AiAnalysisManager {
 
     private val generativeModel by lazy {
         GenerativeModel(
-            modelName = "gemini-1.5-flash",
-            apiKey = "" // Can be supplied via BuildConfig or API Key config
+            modelName = "gemini-3.8-flash",
+            apiKey = com.chets.mindpulseapp.BuildConfig.GEMINI_API_KEY
         )
     }
 
@@ -33,6 +34,7 @@ object AiAnalysisManager {
                 return@withContext text
             }
         } catch (e: Exception) {
+            Log.d("GEMINI",e.toString())
             // Fallback to local intelligent analysis generator on offline / API unavailable
         }
 

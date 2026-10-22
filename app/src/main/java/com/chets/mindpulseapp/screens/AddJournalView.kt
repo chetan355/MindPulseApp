@@ -10,18 +10,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -32,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -87,33 +92,107 @@ fun AddJournalView(
                 .padding(paddingValues)
         ) {
             Card(
-                modifier = Modifier.padding(8.dp),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardColors(
-                    contentColor = MaterialTheme.colorScheme.surfaceContainer,
-                    disabledContentColor = MaterialTheme.colorScheme.secondaryContainer,
-                    disabledContainerColor = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer
-                )
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
-                Column(modifier = Modifier.padding(8.dp)) {
-                    Text(
-                        text = "What's in your mind?",
-                        fontSize = 24.sp,
-                        fontFamily = FontFamily.Serif,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text(
+                                text = "What's in your mind?",
+                                fontSize = 22.sp,
+                                fontFamily = FontFamily.Serif,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                            Text(
+                                text = "Write freely. This is your safe space.",
+                                fontSize = 12.sp,
+                                fontFamily = FontFamily.Serif,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75f),
+                                modifier = Modifier.padding(top = 2.dp)
+                            )
+                        }
+                        Icon(
+                            imageVector = Icons.Default.Create,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    val journalText = journalViewModel?.journalContent ?: ""
+
                     OutlinedTextField(
-                        value = journalViewModel?.journalContent ?: "",
+                        value = journalText,
                         onValueChange = {
                             journalViewModel?.onJournalContentChange(it)
                         },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(180.dp),
-                        placeholder = { Text(text = "Enter your thoughts!") }
+                        placeholder = {
+                            Text(
+                                text = "Begin typing your thoughts, memories, or reflections...",
+                                fontFamily = FontFamily.Serif,
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                            )
+                        },
+                        textStyle = TextStyle(
+                            fontFamily = FontFamily.Serif,
+                            fontSize = 15.sp,
+                            lineHeight = 22.sp,
+                            color = MaterialTheme.colorScheme.onSurface
+                        ),
+                        trailingIcon = {
+                            if (journalText.isNotEmpty()) {
+                                IconButton(onClick = { journalViewModel?.onJournalContentChange("") }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Clear,
+                                        contentDescription = "Clear text",
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                                    )
+                                }
+                            }
+                        },
+                        shape = RoundedCornerShape(16.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                        )
                     )
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 6.dp, end = 4.dp),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        val wordCount = if (journalText.trim().isEmpty()) 0 else journalText.trim().split("\\s+".toRegex()).size
+                        Text(
+                            text = "$wordCount word${if (wordCount != 1) "s" else ""} • ${journalText.length} chars",
+                            fontSize = 11.sp,
+                            fontFamily = FontFamily.Serif,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
+                        )
+                    }
                 }
             }
 
@@ -129,8 +208,8 @@ fun AddJournalView(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    .padding(horizontal = 4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 moodList.forEach { item ->
@@ -146,7 +225,7 @@ fun AddJournalView(
                         },
                         modifier = Modifier
                             .weight(1f)
-                            .aspectRatio(1f)
+                            .height(68.dp)
                     )
                 }
             }

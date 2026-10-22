@@ -81,13 +81,13 @@ fun MainView() {
                         tint = Color.Unspecified
                     )
                 },
-                actions = {
-                    Box {
-                        IconButton(onClick = {}) {
-                            Icon(imageVector = Icons.Default.Person, contentDescription = "Profile")
-                        }
-                    }
-                }
+//                actions = {
+//                    Box {
+//                        IconButton(onClick = {}) {
+//                            Icon(imageVector = Icons.Default.Person, contentDescription = "Profile")
+//                        }
+//                    }
+//                }
             )
         }
     }

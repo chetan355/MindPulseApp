@@ -277,10 +277,10 @@ fun HabitItemCard(
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = habit.frequency,
+                        text = if (!habit.isDueToday) "${habit.frequency} • Not due today" else habit.frequency,
                         fontFamily = FontFamily.Serif,
                         fontSize = 12.sp,
-                        color = contentColor
+                        color = if (!habit.isDueToday) MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f) else contentColor
                     )
                 }
             }

@@ -246,6 +246,8 @@ fun AddHabitView(
                                 label = {
                                     Text(
                                         text = freq,
+                                        maxLines = 1,
+                                        fontSize = 12.sp,
                                         fontFamily = FontFamily.Serif,
                                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                                     )
@@ -271,7 +273,7 @@ fun AddHabitView(
                             createAt = System.currentTimeMillis(),
                             isActive = true,
                             frequency = selectedFrequency,
-                            isCompletedToday = false
+                            lastCompletedDate = ""
                         )
                         habitViewModel?.saveHabit(habitEntity)
                         Toast.makeText(context, "Habit '$name' created!", Toast.LENGTH_SHORT).show()

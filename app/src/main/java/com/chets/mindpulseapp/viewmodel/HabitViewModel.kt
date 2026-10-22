@@ -7,6 +7,9 @@ import com.chets.mindpulseapp.data.local.database.entity.HabitEntity
 import com.chets.mindpulseapp.data.local.repository.HabitRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HabitViewModel(private val habitRepository: HabitRepository = Graph.habitRepository) : ViewModel()
 {
@@ -21,7 +24,9 @@ class HabitViewModel(private val habitRepository: HabitRepository = Graph.habitR
 
     fun toggleHabitCompletion(habitEntity: HabitEntity) {
         viewModelScope.launch {
-            val updated = habitEntity.copy(isCompletedToday = !habitEntity.isCompletedToday)
+            val todayStr = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            val newDate = if (habitEntity.isCompletedToday) "" else todayStr
+            val updated = habitEntity.copy(lastCompletedDate = newDate)
             habitRepository.insertHabit(updated)
         }
     }

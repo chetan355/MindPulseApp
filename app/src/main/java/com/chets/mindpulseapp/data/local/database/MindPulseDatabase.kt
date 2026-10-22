@@ -9,7 +9,7 @@ import com.chets.mindpulseapp.data.local.database.entity.JournalEntity
 
 @Database(
     entities = [JournalEntity::class, HabitEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class MindPulseDatabase : RoomDatabase()

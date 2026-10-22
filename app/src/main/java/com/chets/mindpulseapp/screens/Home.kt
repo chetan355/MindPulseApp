@@ -120,7 +120,7 @@ fun Home(
                         Spacer(modifier = Modifier.height(12.dp))
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             moodList.forEach { item ->
@@ -134,7 +134,7 @@ fun Home(
                                     },
                                     modifier = Modifier
                                         .weight(1f)
-                                        .aspectRatio(1f)
+                                        .height(68.dp)
                                 )
                             }
                         }
@@ -315,7 +315,7 @@ fun MoodBox(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(4.dp),
+                .padding(vertical = 4.dp, horizontal = 2.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -323,7 +323,7 @@ fun MoodBox(
                 painter = painterResource(emoji),
                 contentDescription = mood,
                 tint = tint,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
