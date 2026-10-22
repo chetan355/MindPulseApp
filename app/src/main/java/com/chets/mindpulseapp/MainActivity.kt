@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.platform.LocalContext
 import com.chets.mindpulseapp.data.local.Graph
-import com.chets.mindpulseapp.screens.MainView
+import com.chets.mindpulseapp.screens.AppNavigation
 import com.chets.mindpulseapp.ui.theme.MindPulseAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
             MindPulseAppTheme {
                 val context = LocalContext.current
                 Graph.provide(context)
-                MainView()
+                AppNavigation()
             }
         }
     }

@@ -5,6 +5,9 @@ import com.chets.mindpulseapp.R
 
 sealed class Screens(val title : String, val route : String)
 {
+    object Splash : Screens("Splash", "splash")
+    object Onboarding : Screens("Onboarding", "onboarding")
+    object MainApp : Screens("MainApp", "main_app")
     object AddJournal : Screens("Add Journal", "add_journal")
     object AddHabit : Screens("New Habit","add_habit")
     sealed class BottomScreen(val bTitle:String, val bRoute:String, @DrawableRes val icon: Int) : Screens(bTitle,bRoute)

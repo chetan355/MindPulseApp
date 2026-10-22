@@ -35,9 +35,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import android.content.Context
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,8 +61,32 @@ fun Home(
     onAddJournalClick: () -> Unit = {},
     journalViewModel: JournalViewModel? = if (LocalInspectionMode.current) null else viewModel()
 ) {
+    val context = LocalContext.current
     val greetings = remember { Helper.getGreeting() }
-    val selectedMood = remember { mutableStateOf<MoodObjects?>(null) }
+
+    val selectedMood = remember {
+        val prefs = context.getSharedPreferences("mindpulse_prefs", Context.MODE_PRIVATE)
+        val savedDate = prefs.getString("home_selected_mood_date", "") ?: ""
+        val todayStr = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+        val savedMoodName = if (savedDate == todayStr) {
+            prefs.getString("home_selected_mood_name", null)
+        } else {
+            null
+        }
+
+        mutableStateOf(moodList.firstOrNull { it.mood.equals(savedMoodName, ignoreCase = true) })
+    }
+
+    fun updateHomeMood(newMood: MoodObjects?) {
+        selectedMood.value = newMood
+        val prefs = context.getSharedPreferences("mindpulse_prefs", Context.MODE_PRIVATE)
+        val todayStr = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        prefs.edit()
+            .putString("home_selected_mood_date", todayStr)
+            .putString("home_selected_mood_name", newMood?.mood)
+            .apply()
+    }
 
     val journalEntries by journalViewModel?.getAllJournalEntries?.collectAsState(initial = emptyList())
         ?: remember { mutableStateOf(emptyList()) }
@@ -130,7 +159,8 @@ fun Home(
                                     tint = item.tint,
                                     isSelected = selectedMood.value == item,
                                     onClick = {
-                                        selectedMood.value = if (selectedMood.value == item) null else item
+                                        val newMood = if (selectedMood.value == item) null else item
+                                        updateHomeMood(newMood)
                                     },
                                     modifier = Modifier
                                         .weight(1f)

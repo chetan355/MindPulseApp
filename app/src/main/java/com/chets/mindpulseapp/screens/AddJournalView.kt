@@ -241,19 +241,30 @@ fun AddJournalView(
                 Button(
                     onClick = {
                         val content = journalViewModel?.journalContent?.trim().orEmpty()
-                        if (content.isEmpty()) {
-                            Toast.makeText(context, "Please enter your thoughts", Toast.LENGTH_SHORT).show()
-                        } else {
-                            journalViewModel?.saveJournalEntry(
-                                content = content,
-                                mood = selectedMoodObject.value?.mood
-                            )
-                            Toast.makeText(
-                                context,
-                                if (isEditing) "Journal Entry Updated" else "Journal Entry Created",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            navController.popBackStack()
+                        val mood = selectedMoodObject.value?.mood
+
+                        when {
+                            content.isEmpty() && mood == null -> {
+                                Toast.makeText(context, "Please enter your thoughts and select your mood", Toast.LENGTH_SHORT).show()
+                            }
+                            content.isEmpty() -> {
+                                Toast.makeText(context, "Please enter your thoughts", Toast.LENGTH_SHORT).show()
+                            }
+                            mood == null -> {
+                                Toast.makeText(context, "Please select how you're feeling today", Toast.LENGTH_SHORT).show()
+                            }
+                            else -> {
+                                journalViewModel?.saveJournalEntry(
+                                    content = content,
+                                    mood = mood
+                                )
+                                Toast.makeText(
+                                    context,
+                                    if (isEditing) "Journal Entry Updated" else "Journal Entry Created",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                navController.popBackStack()
+                            }
                         }
                     },
                     modifier = Modifier.fillMaxWidth()
