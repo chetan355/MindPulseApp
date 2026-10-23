@@ -34,7 +34,9 @@ object AiAnalysisManager {
                 return@withContext text
             }
         } catch (e: Exception) {
-            Log.d("GEMINI",e.toString())
+            try {
+                Log.d("GEMINI", e.toString())
+            } catch (_: Throwable) {}
             // Fallback to local intelligent analysis generator on offline / API unavailable
         }
 
