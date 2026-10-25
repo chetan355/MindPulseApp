@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -44,10 +45,11 @@ import com.chets.mindpulseapp.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainView() {
-    val viewModel: MainViewModel = viewModel()
-    val journalViewModel : JournalViewModel = viewModel()
-    val habitViewModel: HabitViewModel = viewModel()
+fun MainView(
+    viewModel: MainViewModel = viewModel(),
+    journalViewModel: JournalViewModel = hiltViewModel(),
+    habitViewModel: HabitViewModel = hiltViewModel()
+) {
     val currentScreen = remember { viewModel.currentScreen.value }
     val title = remember { mutableStateOf(currentScreen.title) }
 

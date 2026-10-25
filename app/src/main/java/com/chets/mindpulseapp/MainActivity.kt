@@ -4,19 +4,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.ui.platform.LocalContext
-import com.chets.mindpulseapp.data.local.Graph
 import com.chets.mindpulseapp.screens.AppNavigation
 import com.chets.mindpulseapp.ui.theme.MindPulseAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             MindPulseAppTheme {
-                val context = LocalContext.current
-                Graph.provide(context)
                 AppNavigation()
             }
         }

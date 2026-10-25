@@ -47,13 +47,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.chets.mindpulseapp.data.MoodObjects
 import com.chets.mindpulseapp.data.moodList
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.chets.mindpulseapp.viewmodel.JournalViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddJournalView(
     navController: NavController,
-    journalViewModel: JournalViewModel? = if (LocalInspectionMode.current) null else viewModel()
+    journalViewModel: JournalViewModel? = if (LocalInspectionMode.current) null else hiltViewModel()
 ) {
     val context = LocalContext.current
     val isEditing = journalViewModel?.isEditing ?: false

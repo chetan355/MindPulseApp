@@ -3,9 +3,13 @@ package com.chets.mindpulseapp.data.local.repository
 import com.chets.mindpulseapp.data.local.database.dao.JournalDao
 import com.chets.mindpulseapp.data.local.database.entity.JournalEntity
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class JournalRepository(private val journalDao: JournalDao)
-{
+@Singleton
+class JournalRepository @Inject constructor(
+    private val journalDao: JournalDao
+) {
     fun getAllEntries() : Flow<List<JournalEntity>>
     {
         return journalDao.getAllEntries()

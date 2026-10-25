@@ -3,8 +3,13 @@ package com.chets.mindpulseapp.data.local.repository
 import com.chets.mindpulseapp.data.local.database.dao.HabitDao
 import com.chets.mindpulseapp.data.local.database.entity.HabitEntity
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class HabitRepository(private val habitDao: HabitDao) {
+@Singleton
+class HabitRepository @Inject constructor(
+    private val habitDao: HabitDao
+) {
 
     fun getAllHabits() : Flow<List<HabitEntity>> {
         return habitDao.getAllHabits()

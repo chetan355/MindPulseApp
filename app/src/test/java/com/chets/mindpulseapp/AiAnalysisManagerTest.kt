@@ -6,9 +6,15 @@ import com.chets.mindpulseapp.data.MoodObjects
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 
 class AiAnalysisManagerTest {
+
+    @Before
+    fun setUp() {
+        AiAnalysisManager.forceLocalAnalysisForTesting = true
+    }
 
     @Test
     fun testGenerateInsight_emptyEntries_returnsPromptToJournal() = runTest {

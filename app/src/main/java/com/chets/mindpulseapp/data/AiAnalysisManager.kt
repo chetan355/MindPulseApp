@@ -7,6 +7,8 @@ import kotlinx.coroutines.withContext
 
 object AiAnalysisManager {
 
+    var forceLocalAnalysisForTesting: Boolean = false
+
     private val generativeModel by lazy {
         GenerativeModel(
             modelName = "gemini-3.8-flash",
@@ -23,6 +25,10 @@ object AiAnalysisManager {
 
         if (summary.totalEntries == 0) {
             return@withContext "No journal entries recorded for $timeframe yet. Start writing reflections to unlock AI insights into your emotional well-being!"
+        }
+
+        if (forceLocalAnalysisForTesting || com.chets.mindpulseapp.BuildConfig.GEMINI_API_KEY.isBlank()) {
+            return@withContext generateLocalAnalysis(summary, timeframe)
         }
 
         val prompt = buildPrompt(summary, timeframe, recentExcerpts)

@@ -55,6 +55,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chets.mindpulseapp.data.AiAnalysisManager
 import com.chets.mindpulseapp.data.DailyMoodPoint
@@ -65,7 +66,7 @@ import com.chets.mindpulseapp.viewmodel.JournalViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Insights(
-    journalViewModel: JournalViewModel? = if (LocalInspectionMode.current) null else viewModel()
+    journalViewModel: JournalViewModel? = if (LocalInspectionMode.current) null else hiltViewModel()
 ) {
     var isWeekly by remember { mutableStateOf(true) }
 

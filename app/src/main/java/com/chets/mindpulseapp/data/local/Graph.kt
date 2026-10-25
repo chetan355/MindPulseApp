@@ -11,18 +11,18 @@ object Graph {
     lateinit var mindPulseDatabase: MindPulseDatabase
 
     val journalRepository by lazy {
-
         JournalRepository(mindPulseDatabase.journalDao())
-
     }
 
     val habitRepository by lazy {
         HabitRepository(mindPulseDatabase.habitDao())
     }
-    fun provide(context : Context){
-        mindPulseDatabase = Room.databaseBuilder(context, MindPulseDatabase::class.java, "mindpulse.db")
-            .fallbackToDestructiveMigration(dropAllTables = true)
-            .build()
-    }
 
+    fun provide(context: Context) {
+        if (!::mindPulseDatabase.isInitialized) {
+            mindPulseDatabase = Room.databaseBuilder(context, MindPulseDatabase::class.java, "mindpulse.db")
+                .fallbackToDestructiveMigration(dropAllTables = true)
+                .build()
+        }
+    }
 }

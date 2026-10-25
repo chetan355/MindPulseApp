@@ -2,17 +2,20 @@ package com.chets.mindpulseapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chets.mindpulseapp.data.local.Graph
 import com.chets.mindpulseapp.data.local.database.entity.HabitEntity
 import com.chets.mindpulseapp.data.local.repository.HabitRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
 
-class HabitViewModel(private val habitRepository: HabitRepository = Graph.habitRepository) : ViewModel()
-{
+@HiltViewModel
+class HabitViewModel @Inject constructor(
+    private val habitRepository: HabitRepository
+) : ViewModel() {
     val getAllHabits : Flow<List<HabitEntity>> = habitRepository.getAllHabits()
 
     fun saveHabit(habitEntity: HabitEntity)

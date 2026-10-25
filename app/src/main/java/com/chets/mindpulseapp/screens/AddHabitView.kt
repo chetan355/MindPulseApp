@@ -58,6 +58,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -90,7 +91,7 @@ val frequencyOptions = listOf("Daily", "Weekdays", "Weekends", "Weekly", "Monthl
 @Composable
 fun AddHabitView(
     navController: NavController,
-    habitViewModel: HabitViewModel? = if (LocalInspectionMode.current) null else viewModel()
+    habitViewModel: HabitViewModel? = if (LocalInspectionMode.current) null else hiltViewModel()
 ) {
     val context = LocalContext.current
     var habitName by remember { mutableStateOf("") }

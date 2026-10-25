@@ -49,6 +49,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chets.mindpulseapp.data.Helper
 import com.chets.mindpulseapp.data.MoodObjects
@@ -59,7 +60,7 @@ import com.chets.mindpulseapp.viewmodel.JournalViewModel
 @Composable
 fun Home(
     onAddJournalClick: () -> Unit = {},
-    journalViewModel: JournalViewModel? = if (LocalInspectionMode.current) null else viewModel()
+    journalViewModel: JournalViewModel? = if (LocalInspectionMode.current) null else hiltViewModel()
 ) {
     val context = LocalContext.current
     val greetings = remember { Helper.getGreeting() }

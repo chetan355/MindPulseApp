@@ -47,13 +47,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.chets.mindpulseapp.data.local.database.entity.HabitEntity
 import com.chets.mindpulseapp.viewmodel.HabitViewModel
 
 @Composable
 fun Habits(
     onAddHabitClick: () -> Unit = {},
-    habitViewModel: HabitViewModel? = if (LocalInspectionMode.current) null else viewModel()
+    habitViewModel: HabitViewModel? = if (LocalInspectionMode.current) null else hiltViewModel()
 ) {
     val habitsList by habitViewModel?.getAllHabits?.collectAsState(initial = emptyList())
         ?: remember { mutableStateOf(emptyList()) }

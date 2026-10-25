@@ -5,14 +5,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.chets.mindpulseapp.data.local.Graph
 import com.chets.mindpulseapp.data.local.database.entity.JournalEntity
 import com.chets.mindpulseapp.data.local.repository.JournalRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class JournalViewModel(private val journalRepository: JournalRepository = Graph.journalRepository) : ViewModel()
-{
+@HiltViewModel
+class JournalViewModel @Inject constructor(
+    private val journalRepository: JournalRepository
+) : ViewModel() {
     var currentEntryId by mutableStateOf(0L)
     var currentCreatedAt by mutableStateOf(0L)
     var journalContent by mutableStateOf("")
